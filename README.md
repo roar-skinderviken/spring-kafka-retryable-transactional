@@ -8,12 +8,12 @@ annotation to a transactional retry mechanism.
 The starting point is the
 [RetryableTopicFooListener](src/main/kotlin/no/roar/kafka/retry/listener/RetryableTopicFooListener.kt)
 which is not using transactions. 
-Tests for this class is implemented in
+Tests for this class are implemented in
 [RetryableTopicFooListenerIntegrationTest](src/test/kotlin/no/roar/kafka/retry/listener/RetryableTopicFooListenerIntegrationTest.kt).
 
 The transactional version is implemented in 
 [TransactionalFooListener](src/main/kotlin/no/roar/kafka/retry/listener/TransactionalFooListener.kt) and is activated by
-profile = "tx". Tests for this class is implemented in
+profile = "tx". Tests for this class are implemented in
 [TransactionalFooListenerContainerTest](src/test/kotlin/no/roar/kafka/retry/listener/TransactionalFooListenerIntegrationTest.kt).
 
 [TransactionalFooListenerContainerTest](src/test/kotlin/no/roar/kafka/retry/listener/TransactionalFooListenerContainerTest.kt)
