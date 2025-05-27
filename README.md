@@ -9,7 +9,7 @@ The starting point is the
 [RetryableTopicFooListener](src/main/kotlin/no/roar/kafka/retry/listener/RetryableTopicFooListener.kt)
 which is not using transactions. 
 Tests for this class is implemented in
-[TransactionalFooListenerContainerTest](src/test/kotlin/no/roar/kafka/retry/listener/RetryableTopicFooListenerIntegrationTest.kt).
+[RetryableTopicFooListenerIntegrationTest](src/test/kotlin/no/roar/kafka/retry/listener/RetryableTopicFooListenerIntegrationTest.kt).
 
 The transactional version is implemented in 
 [TransactionalFooListener](src/main/kotlin/no/roar/kafka/retry/listener/TransactionalFooListener.kt) and is activated by
