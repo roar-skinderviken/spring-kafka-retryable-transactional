@@ -1,0 +1,7 @@
+spring:
+  kafka:
+    producer:
+      transaction-id-prefix: tx.
+    consumer:
+      enable-auto-commit: false
+      isolation-level: read_committed
