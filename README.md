@@ -1,10 +1,8 @@
 # spring-kafka-retryable-transactional
-Spring Kafka application demonstrating migration from @RetryableTopic to transactional retries
-
-# Overview
 A Spring Kafka application demonstrating how to migrate from the @RetryableTopic 
 annotation to a transactional retry mechanism.
 
+# Overview
 The starting point is the
 [RetryableTopicFooListener](src/main/kotlin/no/roar/kafka/retry/listener/RetryableTopicFooListener.kt)
 which is not using transactions. 
