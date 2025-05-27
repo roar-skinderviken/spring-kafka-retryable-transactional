@@ -53,7 +53,7 @@ abstract class ListenerTestBase {
     }
 
     @Test
-    fun `given valid message and 2 exceptions when calling send then expect call to handleReply`() {
+    fun `given valid message and 2 exceptions when processing message then expect call to handleReply`() {
         doThrow(*Array(MAX_SEND_COUNT - 1) { RuntimeException("Some error") })
             .doNothing()
             .`when`(consumerService).handleMessage(anyString())
@@ -68,7 +68,7 @@ abstract class ListenerTestBase {
     }
 
     @Test
-    fun `given valid message and 3 exceptions thrown when calling send then expect call to handleDltMessage`() {
+    fun `given valid message and 3 exceptions thrown when processing message then expect call to handleDltMessage`() {
         doThrow(*Array(MAX_SEND_COUNT) { RuntimeException("Some error") })
             .`when`(consumerService).handleMessage(anyString())
 
