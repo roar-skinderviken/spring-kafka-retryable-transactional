@@ -34,11 +34,6 @@ abstract class ListenerTestBase {
         Awaitility.setDefaultTimeout(10, TimeUnit.SECONDS)
     }
 
-    private val publishFooMessageFunc: () -> Unit by lazy {
-        if (applicationContext.environment.activeProfiles.contains(TX_PROFILE_NAME)) txPublishFunc
-        else defaultPublishFunc
-    }
-
     @Test
     fun `given valid payload when sending message then message should be received by both listeners`() {
         doNothing().`when`(consumerService).handleMessage(anyString())
@@ -81,13 +76,17 @@ abstract class ListenerTestBase {
         }
     }
 
-    private val defaultPublishFunc: () -> Unit = {
-        kafkaTemplate.send(FOO_TOPIC, MESSAGE_KEY_IN_TEST, fooInTest)
-    }
-
-    private val txPublishFunc: () -> Unit = {
-        kafkaTemplate.executeInTransaction {
-            it.send(FOO_TOPIC, MESSAGE_KEY_IN_TEST, fooInTest)
+    private val publishFooMessageFunc: () -> Unit by lazy {
+        if (applicationContext.environment.activeProfiles.contains(TX_PROFILE_NAME)) {
+            {
+                kafkaTemplate.executeInTransaction {
+                    it.send(FOO_TOPIC, MESSAGE_KEY_IN_TEST, fooInTest)
+                }
+            }
+        } else {
+            {
+                kafkaTemplate.send(FOO_TOPIC, MESSAGE_KEY_IN_TEST, fooInTest)
+            }
         }
     }
 
