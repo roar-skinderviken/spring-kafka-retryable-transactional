@@ -38,7 +38,7 @@ abstract class ListenerTestBase {
     fun `given valid payload when sending message then message should be received by both listeners`() {
         doNothing().`when`(consumerService).handleMessage(anyString())
 
-        publishFooMessageFunc()
+        publishFooMessage()
 
         await().untilAsserted {
             verify(consumerService, never()).handleDltMessage(anyString())
@@ -53,7 +53,7 @@ abstract class ListenerTestBase {
             .doNothing()
             .`when`(consumerService).handleMessage(anyString())
 
-        publishFooMessageFunc()
+        publishFooMessage()
 
         await().untilAsserted {
             verify(consumerService, never()).handleDltMessage(anyString())
@@ -67,7 +67,7 @@ abstract class ListenerTestBase {
         doThrow(*Array(MAX_SEND_COUNT) { RuntimeException("Some error") })
             .`when`(consumerService).handleMessage(anyString())
 
-        publishFooMessageFunc()
+        publishFooMessage()
 
         await().untilAsserted {
             verify(consumerService, never()).handleReply(anyString())
@@ -76,18 +76,11 @@ abstract class ListenerTestBase {
         }
     }
 
-    private val publishFooMessageFunc: () -> Unit by lazy {
-        if (applicationContext.environment.activeProfiles.contains(TX_PROFILE_NAME)) {
-            {
-                kafkaTemplate.executeInTransaction {
-                    it.send(FOO_TOPIC, MESSAGE_KEY_IN_TEST, fooInTest)
-                }
-            }
-        } else {
-            {
-                kafkaTemplate.send(FOO_TOPIC, MESSAGE_KEY_IN_TEST, fooInTest)
-            }
-        }
+    private fun publishFooMessage() {
+        if (applicationContext.environment.activeProfiles.contains(TX_PROFILE_NAME))
+            kafkaTemplate.executeInTransaction { it.send(FOO_TOPIC, MESSAGE_KEY_IN_TEST, fooInTest) }
+        else
+            kafkaTemplate.send(FOO_TOPIC, MESSAGE_KEY_IN_TEST, fooInTest)
     }
 
     companion object {
