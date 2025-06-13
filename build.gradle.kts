@@ -1,11 +1,11 @@
 plugins {
-	kotlin("jvm") version "2.1.21"
-	kotlin("plugin.spring") version "2.1.21"
-	id("org.springframework.boot") version "3.5.0"
-	id("io.spring.dependency-management") version "1.1.7"
+	alias(libs.plugins.kotlin.jvm)
+	alias(libs.plugins.kotlin.plugin.spring)
+	alias(libs.plugins.springframework.boot)
+	alias(libs.plugins.dependency.management)
 }
 
-group = "no.roar"
+group = "no.roar.kafka.retry"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -25,14 +25,20 @@ dependencies {
 	implementation("org.springframework.kafka:spring-kafka")
 	runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	// test
+	testImplementation(libs.kotest.runner.junit5)
+	testImplementation(libs.kotest.assertions.core)
+	testImplementation(libs.kotest.extensions.spring)
+	testImplementation(libs.mockk)
+	testImplementation(libs.springmockk)
+
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		exclude(module = "mockito-core")
+	}
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testImplementation("org.testcontainers:kafka")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-	testImplementation(libs.mockito)
-	mockitoAgent(libs.mockito) { isTransitive = false }
 }
 
 kotlin {
@@ -42,7 +48,11 @@ kotlin {
 }
 
 tasks.test {
-	jvmArgs("-javaagent:${mockitoAgent.asPath}")
+	jvmArgs(
+		"-Xshare:off",
+		"-XX:+EnableDynamicAgentLoading",
+		"-Dkotest.framework.classpath.scanning.autoscan.disable=true",
+		"-Dkotest.framework.config.fqn=no.roar.kafka.retry.KotestConfig"
+	)
 	useJUnitPlatform()
-	systemProperty("spring.profiles.active", "test")
 }

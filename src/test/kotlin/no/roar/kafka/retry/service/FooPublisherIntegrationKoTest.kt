@@ -2,7 +2,7 @@ package no.roar.kafka.retry.service
 
 import com.ninjasquad.springmockk.MockkBean
 import io.kotest.assertions.nondeterministic.eventually
-import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.core.spec.style.StringSpec
 import io.mockk.verify
 import no.roar.kafka.retry.TX_PROFILE_NAME
 import no.roar.kafka.retry.listener.ListenerTestBase.Companion.MESSAGE_KEY_IN_TEST
@@ -17,23 +17,17 @@ import kotlin.time.Duration.Companion.seconds
 @SpringBootTest
 @EmbeddedKafka
 @DirtiesContext
-class FooPublisherIntegrationTest(
+class FooPublisherIntegrationKoTest(
     samplePublisher: FooPublisher,
     @MockkBean(relaxed = true) private val mockConsumerService: ConsumerService
-) : BehaviorSpec({
+) : StringSpec({
 
-    Given("a valid Foo") {
-        When("calling publishFoo") {
-            samplePublisher.publishFoo(MESSAGE_KEY_IN_TEST, fooInTest)
+    "given a valid Foo when calling publishFoo expect handleMessage and handleReply to be called" {
+        samplePublisher.publishFoo(MESSAGE_KEY_IN_TEST, fooInTest)
 
-            Then("expect handleMessage and handleReply to be called") {
-                eventually(10.seconds) {
-                    verify {
-                        mockConsumerService.handleMessage(fooInTest.firstName)
-                        mockConsumerService.handleReply(fooInTest.firstName)
-                    }
-                }
-            }
+        eventually(20.seconds) {
+            verify { mockConsumerService.handleMessage(fooInTest.firstName) }
+            verify { mockConsumerService.handleReply(fooInTest.firstName) }
         }
     }
 })

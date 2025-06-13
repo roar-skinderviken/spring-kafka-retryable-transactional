@@ -1,35 +1,25 @@
 package no.roar.kafka.retry.listener
 
+import io.kotest.core.spec.style.StringSpec
+import io.mockk.mockk
+import io.mockk.verify
 import no.roar.kafka.retry.FOO_TOPIC
 import no.roar.kafka.retry.listener.ListenerTestBase.Companion.MESSAGE_KEY_IN_TEST
 import no.roar.kafka.retry.listener.ListenerTestBase.Companion.fooInTest
 import no.roar.kafka.retry.model.Foo
 import no.roar.kafka.retry.service.ConsumerService
 import org.apache.kafka.clients.consumer.ConsumerRecord
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito.anyString
-import org.mockito.Mockito.verify
-import org.mockito.junit.jupiter.MockitoExtension
 
-@ExtendWith(MockitoExtension::class)
-class RetryableTopicFooListenerTest {
+class RetryableTopicFooListenerTest : StringSpec({
+    val consumerService: ConsumerService = mockk(relaxed = true)
+    val sut = RetryableTopicFooListener(consumerService)
 
-    @Mock
-    lateinit var consumerService: ConsumerService
+    "given valid message when calling listenForFoo expect handleMessage to be called" {
+        sut.listenForFoo(fooRecordInTest.value(), 42)
 
-    @InjectMocks
-    lateinit var sampleListener: RetryableTopicFooListener
-
-    @Test
-    fun `given valid message when calling listenForFoo expect handleMessage to be called`() {
-        sampleListener.listenForFoo(fooRecordInTest.value(), 42)
-
-        verify(consumerService).handleMessage(anyString())
+        verify { consumerService.handleMessage(any()) }
     }
-
+}) {
     companion object {
         val fooRecordInTest: ConsumerRecord<Int, Foo> = ConsumerRecord(
             FOO_TOPIC,

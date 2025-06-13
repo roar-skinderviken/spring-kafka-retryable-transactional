@@ -1,6 +1,10 @@
 spring:
   application:
     name: Kafka test
+
+  main:
+    banner-mode: off
+
   kafka:
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
