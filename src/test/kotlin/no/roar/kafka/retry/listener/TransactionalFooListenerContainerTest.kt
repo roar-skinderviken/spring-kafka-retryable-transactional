@@ -14,6 +14,6 @@ class TransactionalFooListenerContainerTest : ListenerTestBase() {
 
         @Suppress("unused")
         @ServiceConnection
-        var kafka = ConfluentKafkaContainer("confluentinc/cp-kafka:7.8.0")
+        val kafka = ConfluentKafkaContainer("confluentinc/cp-kafka:7.8.0")
     }
 }

@@ -8,17 +8,9 @@ plugins {
 group = "no.roar.kafka.retry"
 version = "0.0.1-SNAPSHOT"
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
-	}
-}
-
 repositories {
 	mavenCentral()
 }
-
-val mockitoAgent = configurations.create("mockitoAgent")
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
@@ -42,8 +34,9 @@ dependencies {
 }
 
 kotlin {
+	jvmToolchain(21)
 	compilerOptions {
-		freeCompilerArgs.addAll("-Xjsr305=strict")
+		freeCompilerArgs.add("-Xjsr305=strict")
 	}
 }
 
