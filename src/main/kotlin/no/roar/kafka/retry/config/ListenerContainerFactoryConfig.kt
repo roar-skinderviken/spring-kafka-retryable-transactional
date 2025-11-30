@@ -28,7 +28,7 @@ class ListenerContainerFactoryConfig {
         kafkaTransactionManager: KafkaTransactionManager<Any, Any>
     ): ConcurrentKafkaListenerContainerFactory<Any, Any> =
         ConcurrentKafkaListenerContainerFactory<Any, Any>().apply {
-            this.consumerFactory = consumerFactory
+            setConsumerFactory(consumerFactory)
             setReplyTemplate(kafkaTemplate)
 
             containerProperties.kafkaAwareTransactionManager = kafkaTransactionManager
