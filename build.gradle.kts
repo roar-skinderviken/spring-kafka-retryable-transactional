@@ -14,8 +14,8 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
-	implementation("org.springframework.kafka:spring-kafka")
-	runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springframework.boot:spring-boot-kafka")
+	runtimeOnly("tools.jackson.module:jackson-module-kotlin:3.0.2") // TODO
 
 	// test
 	testImplementation(libs.kotest.runner.junit5)
@@ -29,7 +29,7 @@ dependencies {
 	}
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
-	testImplementation("org.testcontainers:kafka")
+	testImplementation("org.testcontainers:testcontainers-kafka")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
