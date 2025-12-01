@@ -22,8 +22,7 @@ class FooPublisherIntegrationTest(
     @MockkBean(relaxed = true) private val mockConsumerService: ConsumerService
 ) : BehaviorSpec({
 
-    // TODO: Fix me
-    xGiven("a valid Foo") {
+    Given("a valid Foo") {
         When("calling publishFoo") {
             samplePublisher.publishFoo(MESSAGE_KEY_IN_TEST, fooInTest)
 

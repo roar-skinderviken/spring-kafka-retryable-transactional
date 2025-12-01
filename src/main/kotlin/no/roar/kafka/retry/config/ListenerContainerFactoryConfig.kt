@@ -14,10 +14,12 @@ import org.springframework.kafka.listener.DeadLetterPublishingRecoverer
 import org.springframework.kafka.listener.DefaultAfterRollbackProcessor
 import org.springframework.kafka.support.ExponentialBackOffWithMaxRetries
 import org.springframework.kafka.transaction.KafkaTransactionManager
+import org.springframework.transaction.annotation.EnableTransactionManagement
 
 
 @Profile(TX_PROFILE_NAME)
 @EnableKafka
+@EnableTransactionManagement
 @Configuration(proxyBeanMethods = false)
 class ListenerContainerFactoryConfig {
 
