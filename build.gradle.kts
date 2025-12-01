@@ -15,7 +15,7 @@ repositories {
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-kafka")
-	runtimeOnly("tools.jackson.module:jackson-module-kotlin:3.0.2") // TODO
+	runtimeOnly("tools.jackson.module:jackson-module-kotlin:3.0.3") // TODO
 
 	// test
 	testImplementation(libs.kotest.runner.junit5)
