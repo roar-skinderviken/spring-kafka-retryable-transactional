@@ -5,13 +5,13 @@ import no.roar.kafka.retry.model.Bar
 import no.roar.kafka.retry.model.Foo
 import no.roar.kafka.retry.service.ConsumerService
 import org.springframework.context.annotation.Profile
+import org.springframework.kafka.annotation.BackOff
 import org.springframework.kafka.annotation.DltHandler
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.annotation.RetryableTopic
 import org.springframework.kafka.support.KafkaHeaders
 import org.springframework.messaging.handler.annotation.Header
 import org.springframework.messaging.handler.annotation.SendTo
-import org.springframework.retry.annotation.Backoff
 import org.springframework.stereotype.Component
 
 
@@ -22,7 +22,7 @@ class RetryableTopicFooListener(
 ) {
     @RetryableTopic(
         attempts = MAX_SEND_COUNT.toString(), // 3 is default
-        backoff = Backoff(delay = 100, maxDelay = 2_000, multiplier = 1.4),
+        backOff = BackOff(delay = 100, maxDelay = 2_000, multiplier = 1.4),
     )
     @KafkaListener(
         id = "fooListener",

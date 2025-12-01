@@ -19,8 +19,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.kafka.config.TopicBuilder
 import org.springframework.kafka.core.*
 import org.springframework.kafka.support.ProducerListener
-import org.springframework.kafka.support.serializer.JsonDeserializer
-import org.springframework.kafka.support.serializer.JsonSerializer
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+import org.springframework.kafka.support.serializer.JacksonJsonSerializer
 import org.springframework.kafka.test.context.EmbeddedKafka
 import org.springframework.kafka.transaction.KafkaTransactionManager
 import org.springframework.test.context.ActiveProfiles
@@ -39,7 +39,7 @@ class TransactionalFooListenerSpringJUnitTest : ListenerTestBase() {
 
     @TestConfiguration
     class KafkaConfig(
-        @Value("\${spring.kafka.bootstrap-servers}") private val bootstrapServers: String
+        @param:Value($$"${spring.kafka.bootstrap-servers}") private val bootstrapServers: String
     ) {
         @Bean
         fun topics(): KafkaAdmin.NewTopics = KafkaAdmin.NewTopics(
@@ -56,7 +56,7 @@ class TransactionalFooListenerSpringJUnitTest : ListenerTestBase() {
             mapOf(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to IntegerSerializer::class.java,
-                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to JsonSerializer::class.java,
+                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to JacksonJsonSerializer::class.java,
                 ProducerConfig.TRANSACTIONAL_ID_CONFIG to "tx."
             )
         )
@@ -65,7 +65,7 @@ class TransactionalFooListenerSpringJUnitTest : ListenerTestBase() {
         fun kafkaTemplate(
             producerFactory: ProducerFactory<Any, Any>
         ): KafkaTemplate<*, *> = KafkaTemplate(producerFactory).apply {
-            transactionIdPrefix = "tx."
+            setTransactionIdPrefix("tx.")
             setProducerListener(object : ProducerListener<Any, Any> {
                 override fun onSuccess(producerRecord: ProducerRecord<Any, Any>, recordMetadata: RecordMetadata) {
                     println(
@@ -99,11 +99,11 @@ class TransactionalFooListenerSpringJUnitTest : ListenerTestBase() {
             mapOf(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
                 ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to IntegerDeserializer::class.java,
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to JsonDeserializer::class.java,
+                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to JacksonJsonDeserializer::class.java,
                 ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG to false,
                 ConsumerConfig.ISOLATION_LEVEL_CONFIG to DEFAULT_ISOLATION_LEVEL,
                 ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
-                JsonDeserializer.TYPE_MAPPINGS to "foo:no.roar.kafka.retry.model.Foo,bar:no.roar.kafka.retry.model.Bar"
+                JacksonJsonDeserializer.TYPE_MAPPINGS to "foo:no.roar.kafka.retry.model.Foo,bar:no.roar.kafka.retry.model.Bar"
             )
         )
 

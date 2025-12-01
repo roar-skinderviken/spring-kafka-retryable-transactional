@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional
 
 
 @Service
-@Transactional
 class FooPublisher(
     private val kafkaTemplate: KafkaTemplate<Int, Foo>
 ) {
+    @Transactional
     fun publishFoo(key: Int, message: Foo) {
         kafkaTemplate.send(FOO_TOPIC, key, message)
             .whenComplete { sendResult, throwable ->

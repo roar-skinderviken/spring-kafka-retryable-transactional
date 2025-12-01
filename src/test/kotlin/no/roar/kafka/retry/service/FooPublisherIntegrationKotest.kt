@@ -17,7 +17,7 @@ import kotlin.time.Duration.Companion.seconds
 @SpringBootTest
 @EmbeddedKafka
 @DirtiesContext
-class FooPublisherIntegrationKoTest(
+class FooPublisherIntegrationKotest(
     samplePublisher: FooPublisher,
     @MockkBean(relaxed = true) private val mockConsumerService: ConsumerService
 ) : StringSpec({
