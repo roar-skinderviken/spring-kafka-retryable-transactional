@@ -7,13 +7,13 @@ spring:
 
   kafka:
     producer:
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
       key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
       properties:
         max.block.ms: 5000
     consumer:
       auto-offset-reset: earliest
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
       key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
       properties:
         spring.json.type.mapping: "foo:no.roar.kafka.retry.model.Foo,bar:no.roar.kafka.retry.model.Bar"
